@@ -17,9 +17,13 @@ export const VocabularyTestManager: React.FC = () => {
 
   const startTest = (config: TestSettings) => {
     // Select Words
-    let sourceWords = [];
+    let sourceWords: any[] = [];
     if (config.customRange) {
-      sourceWords = ALL_WORDS.slice(config.customRange[0] - 1, config.customRange[1]);
+      const [startMod, endMod] = config.customRange;
+      for (let i = startMod; i <= endMod; i++) {
+        const startIdx = (i - 1) * 37;
+        sourceWords.push(...ALL_WORDS.slice(startIdx, startIdx + 37));
+      }
     } else {
       config.selectedModules.forEach((mod) => {
         const start = (mod - 1) * 37;

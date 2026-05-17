@@ -14,7 +14,7 @@ export const TestConfig: React.FC<Props> = ({ onStart }) => {
   const [wordCount, setWordCount] = useState(10);
   const [timeLimit, setTimeLimit] = useState(10);
   const [configType, setConfigType] = useState<"module" | "range">("module");
-  const [range, setRange] = useState<[number, number]>([1, 20]);
+  const [range, setRange] = useState<[number, number]>([1, 9]);
 
   const toggleModule = (id: number) => {
     setSelectedModules((prev) =>
@@ -96,22 +96,31 @@ export const TestConfig: React.FC<Props> = ({ onStart }) => {
             <div className="space-y-4">
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-xs text-gray-400 block mb-1">Start Word #</label>
-                  <input
-                    type="number"
+                  <label className="text-xs text-gray-400 block mb-1">Start Module</label>
+                  <select
                     value={range[0]}
-                    onChange={(e) => setRange([parseInt(e.target.value), range[1]])}
+                    onChange={(e) => {
+                      const start = parseInt(e.target.value);
+                      setRange([start, Math.max(start, range[1])]);
+                    }}
                     className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                  />
+                  >
+                    {HIGH_FREQ_TESTS.map((m) => (
+                      <option key={m.id} value={m.id}>Module {m.id}</option>
+                    ))}
+                  </select>
                 </div>
                 <div className="flex-1">
-                  <label className="text-xs text-gray-400 block mb-1">End Word #</label>
-                  <input
-                    type="number"
+                  <label className="text-xs text-gray-400 block mb-1">End Module</label>
+                  <select
                     value={range[1]}
                     onChange={(e) => setRange([range[0], parseInt(e.target.value)])}
                     className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                  />
+                  >
+                    {HIGH_FREQ_TESTS.map((m) => (
+                      <option key={m.id} value={m.id} disabled={m.id < range[0]}>Module {m.id}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
